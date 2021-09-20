@@ -4,13 +4,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
-console.log(process.env)
 const isProduction = process.env.NODE_ENV === 'production';
 const stylesHandler = MiniCssExtractPlugin.loader;
 
 const dist = isProduction ? 'dist-prod' : 'dist-dev';
 
-console.log(dist);
 const config = {
   entry: {
     main: path.resolve(__dirname, 'main.js')
