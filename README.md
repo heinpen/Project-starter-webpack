@@ -6,7 +6,7 @@ Project starter using bundler [webpack](https://webpack.js.org).
 
 ## Usage 
 
-Run the command below in directory where you cloned project starter:
+Run the command below in directory where you've cloned project-starter:
 
 ### `npm i`
 
