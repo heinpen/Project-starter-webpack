@@ -11,11 +11,11 @@ const dist = isProduction ? 'dist-prod' : 'dist-dev';
 
 const config = {
   entry: {
-    main: path.resolve(__dirname, 'main.js')
+    main: path.resolve(__dirname, 'main.js'),
   },
   devtool: 'eval-source-map',
   output: {
-    path: path.resolve(__dirname, dist)
+    path: path.resolve(__dirname, dist),
   },
   devServer: {
     static: {
@@ -34,10 +34,7 @@ const config = {
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
   optimization: {
-    minimizer: [
-      new CssMinimizerPlugin(),
-      new TerserPlugin()
-    ],
+    minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
   },
   module: {
     rules: [
@@ -61,13 +58,16 @@ const config = {
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+          'eslint-loader',
+        ],
+      },
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
