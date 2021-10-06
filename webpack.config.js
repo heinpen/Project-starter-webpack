@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -11,7 +12,7 @@ const dist = isProduction ? 'dist-prod' : 'dist-dev';
 
 const config = {
   entry: {
-    main: path.resolve(__dirname, 'main.js'),
+    main: path.resolve(__dirname, 'main.mjs'),
   },
   devtool: 'eval-source-map',
   output: {
@@ -25,7 +26,13 @@ const config = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-
+    new ESLintPlugin({
+      extensions: ['mjs', 'js'],
+      failOnError: true,
+      fix: false,
+      emitError: true,
+      emitWarning: true,
+    }),
     new HtmlWebpackPlugin({
       template: './src/html/index.html',
     }),
@@ -56,17 +63,14 @@ const config = {
 
       // babel rules
       {
-        test: /\.m?js$/,
+        test: /\.m?jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-            },
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
           },
-          'eslint-loader',
-        ],
+        },
       },
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
@@ -77,6 +81,7 @@ const config = {
 module.exports = () => {
   if (isProduction) {
     config.mode = 'production';
+    config.devtool = false;
   } else {
     config.mode = 'development';
   }
