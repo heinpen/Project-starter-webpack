@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -34,9 +35,9 @@ const config = {
       emitWarning: true,
     }),
     new HtmlWebpackPlugin({
-      template: './src/html/index.html',
+      filename: 'index.html',
+      template: 'src/html/index.html',
     }),
-
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
@@ -50,15 +51,29 @@ const config = {
         test: /\.css$/i,
         use: [stylesHandler, 'css-loader', 'postcss-loader'],
       },
+
       // img rules
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
       },
+
+      // html rules
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+
       // font rules
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]',
+        },
       },
 
       // babel rules
